@@ -1,20 +1,23 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    id("co.touchlab.skie") version "0.10.12"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    applyDefaultHierarchyTemplate()
 
     androidTarget {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+                }
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,6 +30,18 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlinx.coroutines.core)
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.androidx.lifecycle.viewmodel.ktx)
+            }
+        }
+
+        val iosMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
             }
@@ -41,7 +56,7 @@ kotlin {
 
 android {
     namespace = "com.petros.efthymiou.dailypulse"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 24
     }
