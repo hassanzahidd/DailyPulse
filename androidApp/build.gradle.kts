@@ -37,6 +37,8 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.kotlinx.datetime)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.compose)
     implementation(libs.navigation.compose)

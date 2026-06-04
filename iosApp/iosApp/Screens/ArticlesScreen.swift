@@ -2,6 +2,7 @@
 import SwiftUI
 import shared
 
+
 extension ArticlesScreen {
 
     @MainActor
@@ -11,14 +12,14 @@ extension ArticlesScreen {
 
         init() {
             articlesViewModel = ArticlesViewModel()
-            articlesState = articlesViewModel.articlesState.value
+            articlesState = articlesViewModel.articleState.value
         }
 
-        @Published var articlesState: ArticlesState
+        @Published var articlesState: ArticleState
 
         func startObserving() {
             Task {
-                for await articlesS in articlesViewModel.articlesState {
+                for await articlesS in articlesViewModel.articleState {
                     self.articlesState = articlesS
                 }
             }
@@ -71,7 +72,7 @@ struct ArticleItemView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            AsyncImage(url: URL(string: article.imageUrl)) { phase in
+            AsyncImage(url: URL(string: article.imageUrl ?? "null")) { phase in
                 if phase.image != nil {
                     phase.image!
                         .resizable()
@@ -82,11 +83,11 @@ struct ArticleItemView: View {
                     ProgressView()
                 }
             }
-            Text(article.title)
+            Text(article.title ?? "null")
                 .font(.title)
                 .fontWeight(.bold)
-            Text(article.desc)
-            Text(article.date).frame(maxWidth: .infinity, alignment: .trailing).foregroundStyle(.gray)
+            Text(article.desc ?? "null")
+            Text(article.date ?? "null").frame(maxWidth: .infinity, alignment: .trailing).foregroundStyle(.gray)
         }
         .padding(16)
     }

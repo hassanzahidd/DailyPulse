@@ -94,18 +94,22 @@ fun ArticleItemView(article: Article) {
             contentDescription = null
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = article.title,
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 22.sp)
-        )
+        article.title?.let {
+            Text(
+                text = it,
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 22.sp)
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = article.desc)
+        article.desc?.let { Text(text = it) }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = article.date,
-            style = TextStyle(color = Color.Gray),
-            modifier = Modifier.align(Alignment.End)
-        )
+        article.date?.let {
+            Text(
+                text = it,
+                style = TextStyle(color = Color.Gray),
+                modifier = Modifier.align(Alignment.End)
+            )
+        }
         Spacer(modifier = Modifier.height(4.dp))
     }
 }

@@ -8,3 +8,8 @@ captures
 .cxx
 local.properties
 xcuserdata
+
+* text=auto
+*.sh text eol=lf
+gradlew text eol=lf
+*.pbxproj text eol=lf

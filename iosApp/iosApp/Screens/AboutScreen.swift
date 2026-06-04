@@ -4,7 +4,7 @@ import SwiftUI
 struct AboutScreen: View {
     @Environment(\.dismiss)
     private var dismiss
-
+    
     var body: some View {
         NavigationStack {
             AboutListView()
@@ -21,8 +21,4 @@ struct AboutScreen: View {
                 }
         }
     }
-}
-
-#Preview {
-    AboutScreen()
 }
