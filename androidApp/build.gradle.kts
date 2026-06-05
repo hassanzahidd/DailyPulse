@@ -37,7 +37,9 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.compose)

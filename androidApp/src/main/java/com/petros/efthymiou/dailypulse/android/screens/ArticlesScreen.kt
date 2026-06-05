@@ -32,10 +32,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-
+import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ArticleScreen(
-    articlesViewModel: ArticlesViewModel,
+    articlesViewModel: ArticlesViewModel = koinViewModel(),
     onAboutButtonClick: () -> Unit
 ) {
     val articleState = articlesViewModel.articleState.collectAsState()
