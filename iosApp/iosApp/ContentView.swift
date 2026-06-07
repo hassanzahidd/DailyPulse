@@ -4,10 +4,11 @@ import shared
 struct ContentView: View {
 
     @State private var shouldOpenAbout = false
+    let articleScreen = ArticlesScreen(viewModel: .init())
 
     var body: some View {
         NavigationStack{
-            ArticlesScreen(viewModel: .init())
+            articleScreen
                 .toolbar {
                     ToolbarItem {
                         Button {
@@ -20,6 +21,8 @@ struct ContentView: View {
                         }
                     }
                 }
+        }.refreshable {
+           articleScreen.viewModel.articlesViewModel.forceRefresh()
         }
     }
 }

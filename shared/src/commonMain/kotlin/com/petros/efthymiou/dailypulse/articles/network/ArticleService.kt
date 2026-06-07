@@ -1,5 +1,6 @@
-package com.petros.efthymiou.dailypulse.articles
+package com.petros.efthymiou.dailypulse.articles.network
 
+import com.petros.efthymiou.dailypulse.articles.data.ArticleRaw
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -22,5 +23,12 @@ class ArticleService(
             parameter("apiKey", apiKey)
         }.body()
         return response.article
+    }
+
+    suspend fun fetchSources(): List<Source>{
+       val response : SourcesResponse = httpClient.get("https://newsapi.org/v2/top-headlines/sources"){
+           parameter("apiKey", apiKey)
+       }.body()
+        return response.source
     }
 }

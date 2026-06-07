@@ -1,5 +1,10 @@
-package com.petros.efthymiou.dailypulse.articles
+package com.petros.efthymiou.dailypulse.application
 
+import com.petros.efthymiou.dailypulse.articles.data.Article
+import com.petros.efthymiou.dailypulse.articles.data.ArticleRaw
+import com.petros.efthymiou.dailypulse.articles.data.ArticleRepository
+import com.petros.efthymiou.dailypulse.articles.network.Source
+import com.petros.efthymiou.dailypulse.articles.network.SourceAfterNetwork
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -11,9 +16,9 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-class ArticleUseCase(private val articleService: ArticleService) {
-    suspend fun getArticles(): List<Article> {
-        val articlesRaw = articleService.fetchArticles()
+class ArticleUseCase(private val repo: ArticleRepository) {
+    suspend fun getArticles(forceRefresh: Boolean): List<Article> {
+        val articlesRaw = repo.getArticles(forceRefresh)
         return mapArticle(articlesRaw)
     }
 
@@ -27,6 +32,20 @@ class ArticleUseCase(private val articleService: ArticleService) {
                 desc = raw.description
             )
         }
+    }
+
+    suspend fun getSources(): List<Source>{
+        val sources = repo.getSources()
+        sources.forEach {
+            source ->
+            SourceAfterNetwork(
+                name = source.name,
+                language = source.language,
+                desc = source.language
+            )
+
+        }
+        return sources
     }
 
     @OptIn(ExperimentalTime::class)

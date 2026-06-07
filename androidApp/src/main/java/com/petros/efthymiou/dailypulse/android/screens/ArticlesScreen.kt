@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,27 +27,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.petros.efthymiou.dailypulse.articles.Article
-import com.petros.efthymiou.dailypulse.articles.ArticlesViewModel
+import com.petros.efthymiou.dailypulse.articles.data.Article
+import com.petros.efthymiou.dailypulse.application.ArticlesViewModel
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+
 @Composable
 fun ArticleScreen(
     articlesViewModel: ArticlesViewModel = koinViewModel(),
-    onAboutButtonClick: () -> Unit
+    onAboutButtonClick: () -> Unit,
+    onSourceButtonClick: () -> Unit
 ) {
     val articleState = articlesViewModel.articleState.collectAsState()
-    Column() {
-        AppBar(onAboutButtonClick)
-        if (articleState.value.loading)
-            Loader()
-        if (articleState.value.error != null)
-            ErrorMessage(articleState.value.error!!)
-        if (articleState.value.articles.isNotEmpty())
-            ArticlesListView(articleState.value.articles)
+    PullToRefreshBox(
+        isRefreshing = articleState.value.loading,
+        onRefresh = {
+            articlesViewModel.forceRefresh()
+        }
+    ) {
+        Column() {
+            AppBar(onAboutButtonClick,onSourceButtonClick)
+            if (articleState.value.loading)
+                Loader()
+            if (articleState.value.error != null)
+                ErrorMessage(articleState.value.error!!)
+            if (articleState.value.articles.isNotEmpty())
+                ArticlesListView(articleState.value.articles)
+        }
     }
 }
 
@@ -54,7 +65,8 @@ fun ArticleScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBar(
-    onAboutButtonClick: () -> Unit
+    onAboutButtonClick: () -> Unit,
+    onSourceButtonClick: () -> Unit
 ) {
     TopAppBar(
         title = { Text(text = "Articles") },
@@ -64,6 +76,13 @@ private fun AppBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
+                    contentDescription = null
+                )
+            }
+            IconButton(onClick = onSourceButtonClick,
+            ){
+                Icon(
+                    imageVector = Icons.Default.Star,
                     contentDescription = null
                 )
             }
