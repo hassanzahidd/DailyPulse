@@ -34,7 +34,7 @@ struct ArticlesScreen: View {
 
     var body: some View {
         VStack {
-            AppBar()
+            AppBar(title : "Articles")
 
             if viewModel.articlesState.loading {
                 Loader()
@@ -61,8 +61,9 @@ struct ArticlesScreen: View {
 }
 
 struct AppBar: View {
+    var title: String
     var body: some View {
-        Text("Articles")
+        Text(title)
             .font(.largeTitle)
             .fontWeight(.bold)
     }
